@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { mockPictograms, mockCategories } from '../data/mockData';
 import { getPictogramEmoji } from './PatientView';
+import señavidaHero from '../assets/senavida-hero.png';
 
 interface LandingPageProps {
   onLearnMoreClick: () => void;
@@ -66,7 +67,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       // Scroll by 75% of view on desktop, or 100% on mobile
       const scrollAmount = clientWidth > 640 ? clientWidth * 0.75 : clientWidth;
       const targetScroll = direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
-      
+
       scrollContainerRef.current.scrollTo({
         left: targetScroll,
         behavior: 'smooth'
@@ -150,86 +151,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       )}
 
-      {/* 1. HERO SECTION */}
-      <section id="inicio" className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-light text-brand-primary border border-brand-primary/20">
-                <Sparkles className="w-3.5 h-3.5 text-brand-turquoise animate-spin" />
-                Innovación Social en Salud Pública chilena
-              </div>
-              <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight ${highContrast ? 'text-yellow-400' : 'text-brand-dark'}`}>
-                Comunicación inclusiva para una atención de salud <span className="bg-gradient-to-r from-[#3ea5e1] to-[#1fb9a4] bg-clip-text text-transparent font-extrabold">más autónoma.</span>
-              </h1>
-              <p className={`text-lg sm:text-xl leading-relaxed ${highContrast ? 'text-yellow-300' : 'text-brand-text-secondary'}`}>
-                SEÑAVIDA facilita la comunicación fluida entre personas sordas y el personal de salud mediante herramientas visuales innovadoras, texto, pictogramas inteligentes y gestión transparente de consentimientos.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button
-                  onClick={onLearnMoreClick}
-                  className={`px-8 py-4 rounded-xl text-base font-bold transition-transform active:scale-95 flex items-center justify-center gap-2 shadow-lg ${
-                    highContrast
-                      ? 'bg-yellow-400 text-black font-black hover:bg-yellow-300'
-                      : 'bg-brand-primary text-white hover:bg-brand-intermediate hover:shadow-brand-primary/20'
-                  }`}
-                >
-                  Conocer cómo funciona <ArrowRight className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={onLoginClick}
-                  className={`px-8 py-4 rounded-xl text-base font-bold transition-colors border-2 flex items-center justify-center gap-2 ${
-                    highContrast
-                      ? 'border-yellow-400 text-yellow-400 bg-transparent hover:bg-yellow-400/10'
-                      : 'border-brand-primary text-brand-primary bg-white hover:bg-brand-light'
-                  }`}
-                >
-                  🔐 Acceso Personal de Salud
-                </button>
-              </div>
-            </div>
+      {/* 1. HERO SECTION — imagen a ancho completo de pantalla (full-bleed) */}
+      <section id="inicio" className="relative z-10">
+        <div className="relative w-full overflow-hidden">
+          <img
+            src={señavidaHero}
+            alt="SEÑAVIDA — Conectamos mundos, comunicamos vidas"
+            className="w-full h-auto block"
+          />
 
-            {/* Simulated app interface mockup on the right */}
-            <div className="mt-12 lg:mt-0 lg:col-span-5 relative">
-              <div className={`rounded-2xl p-6 shadow-2xl relative overflow-hidden border ${highContrast ? 'bg-black border-yellow-400' : 'bg-white border-brand-border'}`}>
-                {/* Simulated Header */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-brand-turquoise" />
-                    <span className="text-xs font-bold font-mono text-brand-text-secondary">PACIENTE: ANA MARÍA</span>
-                  </div>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-light text-brand-primary font-semibold border border-brand-primary/10">
-                    SV-847291 (Activo)
-                  </span>
-                </div>
+          {/* Degradado oscuro solo en la parte de abajo, para que los
+              botones se lean bien sin importar el color de la foto */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
 
-                {/* Simulated Chat bubble */}
-                <div className="space-y-4 min-h-[220px]">
-                  <div className="flex justify-end">
-                    <div className="bg-brand-light text-brand-dark rounded-2xl rounded-tr-none px-4 py-3 max-w-[85%] border border-brand-primary/10">
-                      <p className="text-xs font-semibold text-brand-primary mb-1">Admisión o Ventanilla</p>
-                      <p className="text-sm">Hola Ana, buenos días. ¿Qué síntomas tienes hoy?</p>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-start">
-                    <div className="bg-brand-success-light text-brand-turquoise-dark rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] border border-brand-turquoise/20">
-                      <p className="text-xs font-semibold text-brand-turquoise mb-1">Paciente · Señas Traducidas</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-lg font-bold">🧠 Me duele la cabeza</span>
-                      </div>
-                      <p className="text-xs text-brand-text-secondary mt-1 font-semibold italic">✓ Confirmado por paciente</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Accessibility labels */}
-                <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs text-brand-text-secondary">
-                  <span>🔊 Lector de pantalla activo</span>
-                  <span className="text-brand-success font-semibold">● Conexión segura</span>
-                </div>
-              </div>
-            </div>
+          {/* Botones flotando sobre la imagen */}
+          <div className="absolute inset-x-0 bottom-6 flex flex-col sm:flex-row justify-center gap-4 px-4">
+            <button
+              onClick={onLearnMoreClick}
+              className={`px-8 py-4 rounded-xl text-base font-bold transition-transform active:scale-95 flex items-center justify-center gap-2 shadow-lg ${highContrast
+                ? 'bg-yellow-400 text-black font-black hover:bg-yellow-300'
+                : 'bg-brand-primary text-white hover:bg-brand-intermediate hover:shadow-brand-primary/20'
+                }`}
+            >
+              Conocer cómo funciona <ArrowRight className="w-5 h-5" />
+            </button>
+            <button
+              onClick={onLoginClick}
+              className={`px-8 py-4 rounded-xl text-base font-bold transition-colors border-2 flex items-center justify-center gap-2 backdrop-blur-sm ${highContrast
+                ? 'border-yellow-400 text-yellow-400 bg-black/40 hover:bg-yellow-400/10'
+                : 'border-white text-white bg-white/10 hover:bg-white/20'
+                }`}
+            >
+              🔐 Acceso Personal de Salud
+            </button>
           </div>
         </div>
       </section>
@@ -331,9 +285,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ].map((step, index) => (
               <div
                 key={index}
-                className={`p-6 rounded-xl border relative transition-all duration-200 hover:-translate-y-1 ${
-                  highContrast ? 'border-yellow-400 bg-black' : 'bg-white border-brand-border/60 shadow-sm'
-                }`}
+                className={`p-6 rounded-xl border relative transition-all duration-200 hover:-translate-y-1 ${highContrast ? 'border-yellow-400 bg-black' : 'bg-white border-brand-border/60 shadow-sm'
+                  }`}
               >
                 <div className="absolute top-4 right-4 text-4xl font-black text-brand-primary/10 font-mono">
                   {step.num}
@@ -495,11 +448,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   }
                 }}
                 placeholder="¿Qué buscas? Escribe aquí (ej: dolor, fiebre, agua, baño...)"
-                className={`w-full pl-11 pr-12 py-3.5 rounded-2xl border font-bold text-xs focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none shadow-sm transition-all ${
-                  highContrast
-                    ? 'border-yellow-400 bg-black text-yellow-400 focus:ring-yellow-400'
-                    : 'border-brand-border bg-white text-brand-dark'
-                }`}
+                className={`w-full pl-11 pr-12 py-3.5 rounded-2xl border font-bold text-xs focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none shadow-sm transition-all ${highContrast
+                  ? 'border-yellow-400 bg-black text-yellow-400 focus:ring-yellow-400'
+                  : 'border-brand-border bg-white text-brand-dark'
+                  }`}
               />
               {searchQuery && (
                 <button
@@ -510,11 +462,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       scrollContainerRef.current.scrollLeft = 0;
                     }
                   }}
-                  className={`absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md transition-all ${
-                    highContrast
-                      ? 'bg-yellow-400 text-black hover:bg-yellow-300'
-                      : 'bg-brand-coral-light/30 text-brand-coral hover:bg-brand-coral hover:text-white'
-                  }`}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md transition-all ${highContrast
+                    ? 'bg-yellow-400 text-black hover:bg-yellow-300'
+                    : 'bg-brand-coral-light/30 text-brand-coral hover:bg-brand-coral hover:text-white'
+                    }`}
                 >
                   Limpiar
                 </button>
@@ -536,15 +487,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                         scrollContainerRef.current.scrollLeft = 0;
                       }
                     }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 ${
-                      isSelected
-                        ? highContrast
-                          ? 'bg-yellow-400 text-black font-extrabold border-2 border-black ring-2 ring-yellow-400'
-                          : 'bg-brand-primary text-white shadow-md shadow-brand-primary/20 scale-105'
-                        : highContrast
+                    className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 ${isSelected
+                      ? highContrast
+                        ? 'bg-yellow-400 text-black font-extrabold border-2 border-black ring-2 ring-yellow-400'
+                        : 'bg-brand-primary text-white shadow-md shadow-brand-primary/20 scale-105'
+                      : highContrast
                         ? 'border border-yellow-400 text-yellow-400 bg-black hover:bg-yellow-400/20'
                         : 'border border-brand-border/60 text-brand-text-secondary bg-white hover:border-brand-primary/40 hover:text-brand-primary hover:bg-brand-light/30'
-                    }`}
+                      }`}
                   >
                     {cat.name}
                   </button>
@@ -556,9 +506,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* Search Scope Label */}
           {searchQuery && (
             <div className="text-center mb-6">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                highContrast ? 'bg-yellow-400/20 text-yellow-400' : 'bg-brand-light text-brand-primary'
-              }`}>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${highContrast ? 'bg-yellow-400/20 text-yellow-400' : 'bg-brand-light text-brand-primary'
+                }`}>
                 🔍 Mostrando resultados para "{searchQuery}" ({mockPictograms.filter((pic) => {
                   if (!pic.isActive) return false;
                   return (
@@ -587,13 +536,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               {/* Left Arrow Button (hidden on scroll start) */}
               <button
                 onClick={() => handleCarouselScroll('left')}
-                className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border transition-all active:scale-95 shadow-lg hidden md:flex items-center justify-center ${
-                  scrollProgress <= 0.02
-                    ? 'opacity-40 cursor-not-allowed border-brand-border text-brand-text-secondary/40 bg-brand-bg/40'
-                    : highContrast
+                className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border transition-all active:scale-95 shadow-lg hidden md:flex items-center justify-center ${scrollProgress <= 0.02
+                  ? 'opacity-40 cursor-not-allowed border-brand-border text-brand-text-secondary/40 bg-brand-bg/40'
+                  : highContrast
                     ? 'border-2 border-yellow-400 bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black'
                     : 'border-brand-border bg-white text-brand-primary hover:bg-brand-light hover:text-brand-primary-dark hover:border-brand-primary/30'
-                }`}
+                  }`}
                 title="Deslizar a la izquierda"
                 disabled={scrollProgress <= 0.02}
               >
@@ -624,18 +572,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     return (
                       <div
                         key={pic.id}
-                        className={`snap-start shrink-0 w-full sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] p-6 rounded-2xl border flex flex-col justify-between items-center text-center transition-all duration-300 hover:shadow-lg hover:border-brand-primary/30 ${
-                          highContrast
-                            ? 'border-yellow-400 bg-black text-yellow-400'
-                            : 'bg-white border-brand-border/60 shadow-xs'
-                        }`}
+                        className={`snap-start shrink-0 w-full sm:w-[calc(50%-8px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)] p-6 rounded-2xl border flex flex-col justify-between items-center text-center transition-all duration-300 hover:shadow-lg hover:border-brand-primary/30 ${highContrast
+                          ? 'border-yellow-400 bg-black text-yellow-400'
+                          : 'bg-white border-brand-border/60 shadow-xs'
+                          }`}
                       >
                         {/* Pictogram Visual Box with animated outline if playing */}
-                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 relative ${
-                          isPlaying 
-                            ? 'animate-bounce scale-110' 
-                            : 'hover:scale-110'
-                        } ${pic.colorClass}`}>
+                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 relative ${isPlaying
+                          ? 'animate-bounce scale-110'
+                          : 'hover:scale-110'
+                          } ${pic.colorClass}`}>
                           {isPlaying && (
                             <span className="absolute -inset-1.5 rounded-full border border-brand-primary animate-ping opacity-45" />
                           )}
@@ -644,14 +590,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                         {/* Info & Phrase description */}
                         <div className="space-y-1.5 mb-5 flex-1 flex flex-col justify-center">
-                          <h4 className={`text-sm font-black tracking-tight ${
-                            highContrast ? 'text-yellow-400' : 'text-brand-dark'
-                          }`}>
+                          <h4 className={`text-sm font-black tracking-tight ${highContrast ? 'text-yellow-400' : 'text-brand-dark'
+                            }`}>
                             {pic.title}
                           </h4>
-                          <p className={`text-xs italic leading-normal ${
-                            highContrast ? 'text-yellow-300' : 'text-brand-text-secondary'
-                          }`}>
+                          <p className={`text-xs italic leading-normal ${highContrast ? 'text-yellow-300' : 'text-brand-text-secondary'
+                            }`}>
                             "{pic.phrase}"
                           </p>
                         </div>
@@ -660,13 +604,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                         <button
                           onClick={() => handlePlaySpeech(pic.id, pic.speechText)}
                           disabled={isPlaying}
-                          className={`w-full inline-flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl text-xs font-black transition-all ${
-                            isPlaying
-                              ? 'bg-brand-primary text-white shadow'
-                              : highContrast
+                          className={`w-full inline-flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl text-xs font-black transition-all ${isPlaying
+                            ? 'bg-brand-primary text-white shadow'
+                            : highContrast
                               ? 'bg-yellow-400 text-black hover:bg-yellow-300'
                               : 'bg-brand-light text-brand-primary hover:bg-brand-primary hover:text-white hover:shadow-sm'
-                          }`}
+                            }`}
                         >
                           <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse' : ''}`} />
                           {isPlaying ? 'Reproduciendo...' : 'Escuchar Voz'}
@@ -679,13 +622,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               {/* Right Arrow Button (hidden on scroll end) */}
               <button
                 onClick={() => handleCarouselScroll('right')}
-                className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border transition-all active:scale-95 shadow-lg hidden md:flex items-center justify-center ${
-                  scrollProgress >= 0.98
-                    ? 'opacity-40 cursor-not-allowed border-brand-border text-brand-text-secondary/40 bg-brand-bg/40'
-                    : highContrast
+                className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border transition-all active:scale-95 shadow-lg hidden md:flex items-center justify-center ${scrollProgress >= 0.98
+                  ? 'opacity-40 cursor-not-allowed border-brand-border text-brand-text-secondary/40 bg-brand-bg/40'
+                  : highContrast
                     ? 'border-2 border-yellow-400 bg-black text-yellow-400 hover:bg-yellow-400 hover:text-black'
                     : 'border-brand-border bg-white text-brand-primary hover:bg-brand-light hover:text-brand-primary-dark hover:border-brand-primary/30'
-                }`}
+                  }`}
                 title="Deslizar a la derecha"
                 disabled={scrollProgress >= 0.98}
               >
@@ -696,26 +638,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="flex md:hidden justify-center gap-6 mt-4">
                 <button
                   onClick={() => handleCarouselScroll('left')}
-                  className={`p-2.5 rounded-xl border flex items-center gap-1 text-xs font-bold active:scale-95 transition-all ${
-                    scrollProgress <= 0.02
-                      ? 'opacity-30 cursor-not-allowed'
-                      : highContrast
+                  className={`p-2.5 rounded-xl border flex items-center gap-1 text-xs font-bold active:scale-95 transition-all ${scrollProgress <= 0.02
+                    ? 'opacity-30 cursor-not-allowed'
+                    : highContrast
                       ? 'border-yellow-400 text-yellow-400'
                       : 'border-brand-border text-brand-primary bg-white'
-                  }`}
+                    }`}
                   disabled={scrollProgress <= 0.02}
                 >
                   <ChevronLeft className="w-4 h-4" /> Anterior
                 </button>
                 <button
                   onClick={() => handleCarouselScroll('right')}
-                  className={`p-2.5 rounded-xl border flex items-center gap-1 text-xs font-bold active:scale-95 transition-all ${
-                    scrollProgress >= 0.98
-                      ? 'opacity-30 cursor-not-allowed'
-                      : highContrast
+                  className={`p-2.5 rounded-xl border flex items-center gap-1 text-xs font-bold active:scale-95 transition-all ${scrollProgress >= 0.98
+                    ? 'opacity-30 cursor-not-allowed'
+                    : highContrast
                       ? 'border-yellow-400 text-yellow-400'
                       : 'border-brand-border text-brand-primary bg-white'
-                  }`}
+                    }`}
                   disabled={scrollProgress >= 0.98}
                 >
                   Siguiente <ChevronRight className="w-4 h-4" />
@@ -736,9 +676,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           ) : (
             /* Friendly empty search result state */
-            <div className={`p-12 text-center rounded-2xl border max-w-md mx-auto space-y-3 ${
-              highContrast ? 'border-yellow-400 bg-black text-yellow-400' : 'bg-white border-brand-border/80'
-            }`}>
+            <div className={`p-12 text-center rounded-2xl border max-w-md mx-auto space-y-3 ${highContrast ? 'border-yellow-400 bg-black text-yellow-400' : 'bg-white border-brand-border/80'
+              }`}>
               <span className="text-3xl block">💡</span>
               <h4 className="text-sm font-bold text-brand-dark">No se encontraron pictogramas</h4>
               <p className="text-xs text-brand-text-secondary leading-normal">
@@ -749,9 +688,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   setSearchQuery('');
                   setScrollProgress(0);
                 }}
-                className={`mt-2 text-xs font-bold hover:underline ${
-                  highContrast ? 'text-yellow-300' : 'text-brand-primary'
-                }`}
+                className={`mt-2 text-xs font-bold hover:underline ${highContrast ? 'text-yellow-300' : 'text-brand-primary'
+                  }`}
               >
                 Limpiar búsqueda y ver todo
               </button>
@@ -798,9 +736,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ].map((role, idx) => (
               <div
                 key={idx}
-                className={`p-6 rounded-xl border relative ${
-                  highContrast ? 'border-yellow-400 bg-black' : 'bg-brand-bg/50 border-brand-border/40'
-                }`}
+                className={`p-6 rounded-xl border relative ${highContrast ? 'border-yellow-400 bg-black' : 'bg-brand-bg/50 border-brand-border/40'
+                  }`}
               >
                 <div className="w-10 h-10 rounded-lg bg-brand-light text-brand-primary flex items-center justify-center mb-4">
                   <role.icon className="w-5 h-5" />
@@ -880,9 +817,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                         <span className="text-xs font-bold text-brand-dark block">{item.label}</span>
                         <span className="text-[10px] text-brand-text-secondary">{item.desc}</span>
                       </div>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                        item.active ? 'bg-brand-success-light text-brand-success border border-brand-success/20' : 'bg-brand-coral-light/20 text-brand-coral border border-brand-coral/20'
-                      }`}>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${item.active ? 'bg-brand-success-light text-brand-success border border-brand-success/20' : 'bg-brand-coral-light/20 text-brand-coral border border-brand-coral/20'
+                        }`}>
                         {item.active ? 'Aceptado' : 'Rechazado'}
                       </span>
                     </div>
@@ -928,9 +864,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ].map((ben, index) => (
               <div
                 key={index}
-                className={`p-6 rounded-xl border relative ${
-                  highContrast ? 'border-yellow-400 bg-black' : 'bg-white border-brand-border/60 shadow-xs'
-                }`}
+                className={`p-6 rounded-xl border relative ${highContrast ? 'border-yellow-400 bg-black' : 'bg-white border-brand-border/60 shadow-xs'
+                  }`}
               >
                 <div className="text-3xl mb-4">{ben.ico}</div>
                 <h4 className="text-base font-bold text-brand-dark mb-2">{ben.title}</h4>
@@ -958,43 +893,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <div
                   key={index}
                   onClick={() => setOpenFaqIndex(isOpen ? null : index)}
-                  className={`p-5 rounded-xl border cursor-pointer transition-all duration-300 select-none ${
-                    highContrast
-                      ? isOpen
-                        ? 'border-yellow-400 bg-yellow-400/10'
-                        : 'border-yellow-400/50 bg-black hover:border-yellow-400'
-                      : isOpen
+                  className={`p-5 rounded-xl border cursor-pointer transition-all duration-300 select-none ${highContrast
+                    ? isOpen
+                      ? 'border-yellow-400 bg-yellow-400/10'
+                      : 'border-yellow-400/50 bg-black hover:border-yellow-400'
+                    : isOpen
                       ? 'bg-brand-light/50 border-brand-primary shadow-xs'
                       : 'bg-brand-bg/30 border-brand-border/50 hover:border-brand-primary/30 hover:bg-brand-bg/50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <h4 className={`text-sm font-bold flex items-center gap-2.5 transition-colors duration-200 ${
-                      highContrast
-                        ? 'text-yellow-400'
-                        : isOpen
+                    <h4 className={`text-sm font-bold flex items-center gap-2.5 transition-colors duration-200 ${highContrast
+                      ? 'text-yellow-400'
+                      : isOpen
                         ? 'text-brand-primary'
                         : 'text-brand-dark'
-                    }`}>
-                      <HelpCircle className={`w-4.5 h-4.5 flex-shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'scale-110 text-brand-primary' : 'text-brand-turquoise'
-                      }`} />
+                      }`}>
+                      <HelpCircle className={`w-4.5 h-4.5 flex-shrink-0 transition-transform duration-300 ${isOpen ? 'scale-110 text-brand-primary' : 'text-brand-turquoise'
+                        }`} />
                       <span>{faq.q}</span>
                     </h4>
-                    <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 text-brand-primary' : 'text-brand-text-secondary'
-                    }`} />
+                    <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-brand-primary' : 'text-brand-text-secondary'
+                      }`} />
                   </div>
-                  
-                  <div className={`grid transition-all duration-300 ease-in-out ${
-                    isOpen ? 'grid-rows-[1fr] opacity-100 mt-3' : 'grid-rows-[0fr] opacity-0'
-                  }`}>
+
+                  <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100 mt-3' : 'grid-rows-[0fr] opacity-0'
+                    }`}>
                     <div className="overflow-hidden">
-                      <p className={`text-xs leading-relaxed pl-7 border-l-2 ${
-                        highContrast
-                          ? 'text-yellow-200 border-yellow-400'
-                          : 'text-brand-text-secondary border-brand-primary/30'
-                      }`}>
+                      <p className={`text-xs leading-relaxed pl-7 border-l-2 ${highContrast
+                        ? 'text-yellow-200 border-yellow-400'
+                        : 'text-brand-text-secondary border-brand-primary/30'
+                        }`}>
                         {faq.a}
                       </p>
                     </div>

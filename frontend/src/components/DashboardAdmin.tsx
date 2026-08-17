@@ -7,6 +7,8 @@ import React, { useState } from 'react';
 import { mockPictograms } from '../data/mockData';
 import { Pictogram } from '../types';
 import { ShieldCheck, Users, Eye, History, Database, Settings, ToggleLeft, ToggleRight, Plus, Search, HelpCircle } from 'lucide-react';
+import { UserRegistrationForm } from './UserRegistrationForm';
+import { CatalogManagementForm } from './CatalogManagementForm';
 
 interface DashboardAdminProps {
   user: { name: string; email: string; healthCenter?: string; unit?: string };
@@ -70,6 +72,16 @@ export const DashboardAdmin: React.FC<DashboardAdminProps> = ({ user, highContra
           </div>
         </div>
       </div>
+
+      {/* Gestión de catálogos: organizaciones, centros de salud y
+          unidades. Va antes del registro de funcionarios porque ese
+          formulario depende de que existan estos datos primero. */}
+      <CatalogManagementForm highContrast={highContrast} />
+
+      {/* Registro de funcionarios: esta sección conecta de verdad con
+          POST /users. Antes esta pantalla no existía, y el contador de
+          "Funcionarios Activos" de arriba era solo un número fijo. */}
+      <UserRegistrationForm highContrast={highContrast} />
 
       {/* Main Grid: Left column (Pictogram manager), Right Column (Logs + Settings) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

@@ -30,7 +30,7 @@
 // ── Configuración base ──────────────────────────────────────────────────
 
 // La URL del backend viene de la variable de entorno VITE_API_URL (definida
-// en el archivo .env). Nunca hardcodeo la URL acá directamente.
+// en el archivo .env). Nunca hardcodeamos la URL acá directamente.
 const API_BASE_URL = import.meta.env.VITE_API_URL as string;
 
 if (!API_BASE_URL) {
@@ -109,7 +109,7 @@ interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: unknown;
   // Si el endpoint no requiere sesión iniciada (por ahora solo el login),
-  // pongo requiresAuth en false para no intentar mandar un token que no existe.
+  // ponemos requiresAuth en false para no intentar mandar un token que no existe.
   requiresAuth?: boolean;
 }
 
@@ -144,11 +144,12 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}): Promis
     );
   }
 
-  // Caso especial: 204 No Content no trae cuerpo, así que no intento
+  // Caso especial: 204 No Content no trae cuerpo, así que no intentamos
   // parsear JSON (fallaría).
   if (response.status === 204) {
     return undefined as T;
   }
+
   const rawText = await response.text();
 
   // El servidor local está devolviendo un carácter '[' extra al inicio de
@@ -156,7 +157,8 @@ async function apiRequest<T>(path: string, options: RequestOptions = {}): Promis
   // navegador, en distintos servidores (php artisan serve y Apache), así
   // que no depende del código del backend. No alcanzamos a encontrar la
   // causa exacta a tiempo, así que por ahora lo recortamos acá antes de
-  // parsear. Pendiente: investigar la causa real cuando haya tiempo.
+  // parsear. Nos queda pendiente investigar la causa real cuando tengamos
+  // tiempo, y sacar este parche una vez que la resolvamos.
   let cleanText = rawText.trim();
   if (cleanText.startsWith('[') && !cleanText.endsWith(']')) {
     cleanText = cleanText.slice(1);
@@ -245,14 +247,28 @@ export interface Unit {
 // ── Funciones de Autenticación (Módulo A — el que ya está 100% listo) ──
 
 /**
- * Inicia sesión con email y contraseña. Si es exitoso, guarda el token
- * automáticamente para que las siguientes peticiones ya vayan autenticadas.
+ * Inicia sesión con email y contraseña. healthCenterId y unitId son
+ * opcionales: el propio AuthController.php los valida solo si vienen
+ * presentes ("sometimes" en su regla de validación), y si vienen, además
+ * confirma que el usuario realmente pertenezca a ese centro y esa unidad
+ * (si no, responde 403). Si es exitoso, guarda el token automáticamente
+ * para que las siguientes peticiones ya vayan autenticadas.
  */
-export async function login(email: string, password: string): Promise<AuthUser> {
+export async function login(
+  email: string,
+  password: string,
+  healthCenterId?: string,
+  unitId?: string
+): Promise<AuthUser> {
   const data = await apiRequest<LoginResponse>('/auth/login', {
     method: 'POST',
-    body: { email, password },
-    requiresAuth: false, // todavía no tengo token en este punto
+    body: {
+      email,
+      password,
+      ...(healthCenterId ? { healthCenterId } : {}),
+      ...(unitId ? { unitId } : {}),
+    },
+    requiresAuth: false, // todavía no tenemos token en este punto
   });
 
   setStoredToken(data.token);
@@ -312,14 +328,59 @@ export interface RegisterUserPayload {
   password: string;
   passwordConfirmation: string;
   role: UserRole;
+  organizationId: string;
   healthCenterId: string;
-  unitId?: string;
+  unitId: string;
 }
 
 export async function registerUser(payload: RegisterUserPayload): Promise<AuthUser> {
+  // Ojo con este detalle: Laravel exige que el campo de confirmación de
+  // contraseña se llame exactamente "password_confirmation" (con guion
+  // bajo), porque es una convención fija de su regla `confirmed` — no seguir
+  // el patrón camelCase del resto del contrato. Por eso lo traducimos acá,
+  // para que el resto del código pueda seguir usando camelCase.
   const data = await apiRequest<{ user: AuthUser }>('/users', {
     method: 'POST',
-    body: payload,
+    body: {
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
+      password_confirmation: payload.passwordConfirmation,
+      role: payload.role,
+      organizationId: payload.organizationId,
+      healthCenterId: payload.healthCenterId,
+      unitId: payload.unitId,
+    },
   });
   return data.user;
+}
+
+// ── Funciones para crear catálogos (organizations, health-centers, units) ──
+//
+// Revisamos los controllers reales del backend para confirmar los permisos:
+// - Crear una organización: solo super_admin.
+// - Crear un centro de salud: solo super_admin.
+// - Crear una unidad: super_admin o admin_institucional (pero admin_institucional
+//   solo puede crearla dentro de su propio centro; eso lo valida el backend,
+//   no hace falta que lo repitamos acá).
+
+export async function createOrganization(name: string): Promise<Organization> {
+  return apiRequest<Organization>('/organizations', {
+    method: 'POST',
+    body: { name },
+  });
+}
+
+export async function createHealthCenter(name: string, organizationId: string): Promise<HealthCenter> {
+  return apiRequest<HealthCenter>('/health-centers', {
+    method: 'POST',
+    body: { name, organizationId },
+  });
+}
+
+export async function createUnit(name: string, healthCenterId: string): Promise<Unit> {
+  return apiRequest<Unit>('/units', {
+    method: 'POST',
+    body: { name, healthCenterId },
+  });
 }

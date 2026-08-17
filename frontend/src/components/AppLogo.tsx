@@ -20,7 +20,7 @@ export const AppLogo: React.FC<AppLogoProps> = ({
   const isDark = theme === 'dark';
   const isWhite = theme === 'white';
 
-  // Sizing definitions for the outer gradient badge
+  // definiciones de tamaño para la insignia externa con degradado
   const iconSizes = {
     sm: 'w-7 h-7',
     md: 'w-11 h-11',
@@ -39,36 +39,35 @@ export const AppLogo: React.FC<AppLogoProps> = ({
     lg: 'text-[13px] font-medium leading-tight'
   };
 
-  // Color classes
+  // clases de color para títulos y subtítulos según el tema
   const textTitleColor = isWhite
     ? 'text-white'
     : isDark
-    ? 'text-white'
-    : 'text-brand-dark';
+      ? 'text-white'
+      : 'text-brand-dark';
 
   const textSubtitleColor = isWhite
     ? 'text-brand-light/80'
     : isDark
-    ? 'text-brand-light/70'
-    : 'text-brand-text-secondary';
+      ? 'text-brand-light/70'
+      : 'text-brand-text-secondary';
 
   return (
     <div
       id="app-logo-wrapper"
-      className={`flex select-none ${
-        variant === 'vertical' ? 'flex-col items-center text-center' : 'flex-row items-center'
-      } ${size === 'sm' ? 'gap-2' : size === 'lg' ? 'gap-4' : 'gap-2.5'}`}
+      className={`flex select-none ${variant === 'vertical' ? 'flex-col items-center text-center' : 'flex-row items-center'
+        } ${size === 'sm' ? 'gap-2' : size === 'lg' ? 'gap-4' : 'gap-2.5'}`}
     >
-      {/* Icon composite container mirroring the Señavida logo upload: Gradient -> White Circle -> Sky Blue Circle -> Hand */}
+      {/* contenedor compuesto del icono que replica el logo de Señavida: Degradado -> Círculo blanco -> Círculo azul cielo -> Mano */}
       <div
         id="app-logo-composite-icon"
         className={`relative flex items-center justify-center rounded-2xl transition-all duration-300 hover:scale-105 shadow-md bg-gradient-to-tr from-[#7ecbeb] via-[#91ddd4] to-[#a3eed2] ${iconSizes[size]}`}
       >
-        {/* Inner White Circle */}
+        {/* círculo interior blanco */}
         <div className="w-[72%] h-[72%] bg-white rounded-full flex items-center justify-center shadow-xs">
-          {/* Inner Sky Blue Circle */}
+          {/* círculo interior azul cielo */}
           <div className="w-[80%] h-[80%] bg-[#70c1ec] rounded-full flex items-center justify-center">
-            {/* White Hand Icon */}
+            {/* icono de mano en color blanco */}
             <Hand className="w-[58%] h-[58%] text-white stroke-[2.25] fill-none" />
           </div>
         </div>
@@ -87,11 +86,10 @@ export const AppLogo: React.FC<AppLogoProps> = ({
                 </>
               )}
             </span>
-            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${
-              isWhite || isDark
+            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${isWhite || isDark
                 ? 'bg-[#1fb9a4]/20 text-[#1fb9a4]'
                 : 'bg-brand-turquoise/15 text-brand-turquoise-dark'
-            }`}>
+              }`}>
               Inclusivo
             </span>
           </div>
